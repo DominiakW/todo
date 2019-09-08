@@ -1,0 +1,14 @@
+{
+  "name": "todogrid_app",
+  "version": "1.0.0",
+  "description": "todoapp grid",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "Wojciech Dominiak",
+  "license": "ISC"
+}
