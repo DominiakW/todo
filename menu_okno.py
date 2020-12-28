@@ -4,7 +4,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLabel, QGridLayout
-from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox
+from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox, QCheckBox
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
 
@@ -16,13 +16,13 @@ class WindowSprezarka(QWidget):
     def wstecz(self):
         self.w = Menu()
         self.w.show()
-        self.hide()
+        self.close()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             self.w = Menu()
             self.w.show()
-            self.hide()
+            self.close()
 
     def interfejs(self):
 
@@ -39,7 +39,6 @@ class WindowSprezarka(QWidget):
         ukladT.addWidget(etykietaPmax, 2, 0)
         ukladT.addWidget(etykietaPmin, 3, 0)
 
-        # 1-liniowe pola edycyjne
         self.nazwaSprężarkiEdt = QLineEdit()
         self.wydajnoscEdt = QLineEdit()
         self.pmaxEdt = QLineEdit()
@@ -81,13 +80,13 @@ class WindowTrasa(QWidget):
     def wstecz(self):
         self.w = Menu()
         self.w.show()
-        self.hide()
+        self.close()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             self.w = Menu()
             self.w.show()
-            self.hide()
+            self.close()
 
     def interfejs(self):
 
@@ -106,7 +105,6 @@ class WindowTrasa(QWidget):
         ukladT.addWidget(etykietaCzasPodrozy, 3, 0)
         ukladT.addWidget(etykietaCzasPostoju, 4, 0)
 
-        # 1-liniowe pola edycyjne
         self.nazwaTrasyEdt = QLineEdit()
         self.predkoscEdt = QLineEdit()
         self.liczbaStacjiEdt = QLineEdit()
@@ -150,39 +148,315 @@ class WindowCzlon(QWidget):
     def wstecz(self):
         self.w = Menu()
         self.w.show()
-        self.hide()
+        self.close()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             self.w = Menu()
             self.w.show()
-            self.hide()
+            self.close()
 
     def interfejs(self):
 
         # etykiety
-        etykietaNazwaSprężarki = QLabel("Nazwa sprężarki:", self)
-        etykietaWydajnosc = QLabel("Wydajność układu - Qcomp+AD [l/min]:", self)
-        etykietaPmax = QLabel("Ciśnienie maksymalne - pmax [bar]:", self)
-        etykietaPmin = QLabel("Ciśnienie minimalne - pmin [bar]:", self)
+        etykietaNazwaCzlonu = QLabel("Nazwa czlonu:", self)
+
+        etykietaHamulceLiczbaCylidnrow = QLabel("Liczba cylindrów [-]:", self)
+        etykietaHamulceMartwaObjetosc = QLabel("Martwa objętość cylidnra [l]:", self)
+        etykietaHamulcePoleTloka = QLabel("Powierzchnia tloka [dm]:", self)
+        etykietaHamulceCisnienieCylindra = QLabel("Ciśnienie cylidnra przy hamowaniu [bar]:", self)
+        etykietaHamulceSkokCylindra = QLabel("Skok cylindra [mm]:", self)
+        etykietaHamulceSrednicaWewnetrzna = QLabel("Srednica wewnętrzna rur: [mm]:", self)
+        etykietaHamulceSrednicaZewnetrzna = QLabel("Srednica zewnętrzna rur: [mm]:", self)
+        etykietaHamulceDlugoscOrurowania = QLabel("Długość orurowania: [m]:", self)
+
+        etykietaZawieszenieObjetoscMiecha = QLabel("Objętość pojedyńczego miecha [l]:", self)
+        etykietaZawieszenieLiczbaMiechow = QLabel("Liczba miechów [-]:", self)
+        etykietaZawieszenieCisnieniePusty = QLabel("Ciśnienie przy pustym członie [bar]:", self)
+        etykietaZawieszenieCisnieniePelny = QLabel("Ciśnienie przy pełnym członie [bar]:", self)
+        etykietaZawieszenieLiczbaZaworow = QLabel("Liczba zaworów [-]:", self)
+        etykietaZawieszeniePoborPowietrza = QLabel("Pobór powietrza przez zawory [l/min]:", self)
+
+        etykietaKlocekObjetoscSkokowa = QLabel("Objętość skokowa cylindra [l]:", self)
+        etykietaKlocekLiczbaKlockow = QLabel("Liczba klocków czyszczących [-]:", self)
+        etykietaKlocekMaksCisnienie = QLabel("Maksymalne ciśnienie w cylidnrze [bar]:", self)
+        etykietaKlocekWewnetrznaSrednica = QLabel("Srednica wewnętrzna rur: [mm]:", self)
+        etykietaKlocekZewnetrznaSrednica = QLabel("Srednica zewnętrzna rur: [mm]:", self)
+        etykietaKlocekeDlugoscOrurowania = QLabel("Długość orurowania: [m]:", self)
+
+        etykietaPiasLiczbaDysz = QLabel("Liczba dysz [-]:", self)
+        etykietaPiasPobor = QLabel("Pobór powietrza [l/min]:", self)
+        etykietaPiasCzas = QLabel("Czas aplikacji [s]:", self)
+
+        etykietaSmarLiczbaZaworow = QLabel("Liczba zaworow [-]:", self)
+        etykietaSmarPobor = QLabel("Pobór powietrza przez zawór [l/min]:", self)
+        etykietaSmarCzas = QLabel("Czas aplikacji [s]:", self)
+
+        etykietaSyrenyLiczba = QLabel("Liczba syren [-]:", self)
+        etykietaSyrenyPobor = QLabel("Pobór powietrza przez syrenę [l/min]:", self)
+        etykietaSyrenyCzas = QLabel("Czas aplikacji [s]:", self)
+
+        etykietaWcLiczba = QLabel("Liczba toalet [-]:", self)
+        etykietaWcPobor = QLabel("Pobór powietrza przez toaletę [l/min]:", self)
+
+        etykietaZbiorniki = QLabel("Zbiorniki", self)
+        etykietaZbiornikiGłowny = QLabel("Objętość zbiornika głównego [l]:", self)
+        etykietaZbiornikiZawieszenia = QLabel("Objętość zbiorników zawieszenia [l]:", self)
+        etykietaZbiornikiHamulcy = QLabel("Objętość zbiorników hamulcowych [l]:", self)
+        etykietaZbiornikiPozostale = QLabel("Objętość zbiorników pozostałych [l]:", self)
 
         # przypisanie widgetów do układu tabelarycznego
         ukladT = QGridLayout()
-        ukladT.addWidget(etykietaNazwaSprężarki, 0, 0)
-        ukladT.addWidget(etykietaWydajnosc, 1, 0)
-        ukladT.addWidget(etykietaPmax, 2, 0)
-        ukladT.addWidget(etykietaPmin, 3, 0)
+        ukladT.addWidget(etykietaNazwaCzlonu, 0, 0)
 
-        # 1-liniowe pola edycyjne
-        self.nazwaSprężarkiEdt = QLineEdit()
-        self.wydajnoscEdt = QLineEdit()
-        self.pmaxEdt = QLineEdit()
-        self.pminEdt = QLineEdit()
+        ukladT.addWidget(etykietaHamulceLiczbaCylidnrow, 2, 0)
+        ukladT.addWidget(etykietaHamulceMartwaObjetosc, 3, 0)
+        ukladT.addWidget(etykietaHamulcePoleTloka, 4, 0)
+        ukladT.addWidget(etykietaHamulceCisnienieCylindra, 5, 0)
+        ukladT.addWidget(etykietaHamulceSkokCylindra, 6, 0)
+        ukladT.addWidget(etykietaHamulceSrednicaWewnetrzna, 7, 0)
+        ukladT.addWidget(etykietaHamulceSrednicaZewnetrzna, 8, 0)
+        ukladT.addWidget(etykietaHamulceDlugoscOrurowania, 9, 0)
 
-        ukladT.addWidget(self.nazwaSprężarkiEdt, 0, 1)
-        ukladT.addWidget(self.wydajnoscEdt, 1, 1)
-        ukladT.addWidget(self.pmaxEdt, 2, 1)
-        ukladT.addWidget(self.pminEdt, 3, 1)
+        ukladT.addWidget(etykietaZawieszenieObjetoscMiecha, 2, 2)
+        ukladT.addWidget(etykietaZawieszenieLiczbaMiechow, 3, 2)
+        ukladT.addWidget(etykietaZawieszenieCisnieniePusty, 4, 2)
+        ukladT.addWidget(etykietaZawieszenieCisnieniePelny, 5, 2)
+        ukladT.addWidget(etykietaZawieszenieLiczbaZaworow, 6, 2)
+        ukladT.addWidget(etykietaZawieszeniePoborPowietrza, 7, 2)
+
+        ukladT.addWidget(etykietaKlocekObjetoscSkokowa, 2, 4)
+        ukladT.addWidget(etykietaKlocekLiczbaKlockow, 3, 4)
+        ukladT.addWidget(etykietaKlocekMaksCisnienie, 4, 4)
+        ukladT.addWidget(etykietaKlocekWewnetrznaSrednica, 5, 4)
+        ukladT.addWidget(etykietaKlocekZewnetrznaSrednica, 6, 4)
+        ukladT.addWidget(etykietaKlocekeDlugoscOrurowania, 7, 4)
+
+        ukladT.addWidget(etykietaPiasLiczbaDysz, 11, 0)
+        ukladT.addWidget(etykietaPiasPobor, 12, 0)
+        ukladT.addWidget(etykietaPiasCzas, 13, 0)
+
+        ukladT.addWidget(etykietaSmarLiczbaZaworow, 11, 2)
+        ukladT.addWidget(etykietaSmarPobor, 12, 2)
+        ukladT.addWidget(etykietaSmarCzas, 13, 2)
+
+        ukladT.addWidget(etykietaSyrenyLiczba, 11, 4)
+        ukladT.addWidget(etykietaSyrenyPobor, 12, 4)
+        ukladT.addWidget(etykietaSyrenyCzas, 13, 4)
+
+        ukladT.addWidget(etykietaWcLiczba, 11, 6)
+        ukladT.addWidget(etykietaWcPobor, 12, 6)
+
+        ukladT.addWidget(etykietaZbiorniki, 1, 6)
+        ukladT.addWidget(etykietaZbiornikiGłowny, 2, 6)
+        ukladT.addWidget(etykietaZbiornikiZawieszenia, 3, 6)
+        ukladT.addWidget(etykietaZbiornikiHamulcy, 4, 6)
+        ukladT.addWidget(etykietaZbiornikiPozostale, 5, 6)
+
+        #checkboxy
+        hamulceBtn = QCheckBox("Hamulce", self)
+        ukladT.addWidget(hamulceBtn, 1, 0)
+
+        zawieszenieBtn = QCheckBox("Zawieszenie pneumatyczne", self)
+        ukladT.addWidget(zawieszenieBtn, 1, 2)
+
+        klocekBtn = QCheckBox("Klocki czyszczące", self)
+        ukladT.addWidget(klocekBtn, 1, 4)
+
+        piaseczniceBtn = QCheckBox("Piasecznice", self)
+        ukladT.addWidget(piaseczniceBtn, 10, 0)
+
+        smarowniceBtn = QCheckBox("Smaorwnice obrzeży kół", self)
+        ukladT.addWidget(smarowniceBtn, 10, 2)
+
+        syrenyBtn = QCheckBox("Syreny", self)
+        ukladT.addWidget(syrenyBtn, 10, 4)
+
+        wcBtn = QCheckBox("WC", self)
+        ukladT.addWidget(wcBtn, 10, 6)
+
+        self.nazwaCzlonuEdt = QLineEdit()
+
+        #HAMULCE
+        self.hamulceLiczbaCylidnrowEdt = QLineEdit()
+        self.hamulceLiczbaCylidnrowEdt.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceLiczbaCylidnrowEdt.setReadOnly(state!=Qt.Checked))
+
+        self.hamulceMartwaObjetosc = QLineEdit()
+        self.hamulceMartwaObjetosc.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceMartwaObjetosc.setReadOnly(state!=Qt.Checked))
+
+        self.hamulcePoleTloka = QLineEdit()
+        self.hamulcePoleTloka.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulcePoleTloka.setReadOnly(state!=Qt.Checked))
+
+        self.hamulceCisnienieCylindra = QLineEdit()
+        self.hamulceCisnienieCylindra.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceCisnienieCylindra.setReadOnly(state!=Qt.Checked))
+
+        self.hamulceSkokCylindra = QLineEdit()
+        self.hamulceSkokCylindra.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceSkokCylindra.setReadOnly(state!=Qt.Checked))
+
+        self.hamulceSrednicaWewnetrzna = QLineEdit()
+        self.hamulceSrednicaWewnetrzna.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceSrednicaWewnetrzna.setReadOnly(state!=Qt.Checked))
+
+        self.hamulceSrednicaZewnetrzna = QLineEdit()
+        self.hamulceSrednicaZewnetrzna.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceSrednicaZewnetrzna.setReadOnly(state!=Qt.Checked))
+
+        self.hamulceDlugoscOrurowania = QLineEdit()
+        self.hamulceDlugoscOrurowania.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
+        hamulceBtn.stateChanged.connect(lambda state: self.hamulceDlugoscOrurowania.setReadOnly(state!=Qt.Checked))
+
+        #ZAWIESZENIE
+        self.zawieszenieObjetoscMiecha = QLineEdit()
+        self.zawieszenieObjetoscMiecha.setReadOnly(zawieszenieBtn.checkState()!=Qt.Checked)
+        zawieszenieBtn.stateChanged.connect(lambda state: self.zawieszenieObjetoscMiecha.setReadOnly(state!=Qt.Checked))
+
+        self.zawieszenieLiczbaMiechow = QLineEdit()
+        self.zawieszenieLiczbaMiechow.setReadOnly(zawieszenieBtn.checkState()!=Qt.Checked)
+        zawieszenieBtn.stateChanged.connect(lambda state: self.zawieszenieLiczbaMiechow.setReadOnly(state!=Qt.Checked))
+
+        self.zawieszenieCisnieniePusty = QLineEdit()
+        self.zawieszenieCisnieniePusty.setReadOnly(zawieszenieBtn.checkState()!=Qt.Checked)
+        zawieszenieBtn.stateChanged.connect(lambda state: self.zawieszenieCisnieniePusty.setReadOnly(state!=Qt.Checked))
+
+        self.zawieszenieCisnieniePelny = QLineEdit()
+        self.zawieszenieCisnieniePelny.setReadOnly(zawieszenieBtn.checkState()!=Qt.Checked)
+        zawieszenieBtn.stateChanged.connect(lambda state: self.zawieszenieCisnieniePelny.setReadOnly(state!=Qt.Checked))
+
+        self.zawieszenieLiczbaZaworow = QLineEdit()
+        self.zawieszenieLiczbaZaworow.setReadOnly(zawieszenieBtn.checkState()!=Qt.Checked)
+        zawieszenieBtn.stateChanged.connect(lambda state: self.zawieszenieLiczbaZaworow.setReadOnly(state!=Qt.Checked))
+
+        self.zawieszeniePoborPowietrza = QLineEdit()
+        self.zawieszeniePoborPowietrza.setReadOnly(zawieszenieBtn.checkState()!=Qt.Checked)
+        zawieszenieBtn.stateChanged.connect(lambda state: self.zawieszeniePoborPowietrza.setReadOnly(state!=Qt.Checked))
+
+        #KLOCEK
+        self.klocekObjetoscSkokowa = QLineEdit()
+        self.klocekObjetoscSkokowa.setReadOnly(klocekBtn.checkState()!=Qt.Checked)
+        klocekBtn.stateChanged.connect(lambda state: self.klocekObjetoscSkokowa.setReadOnly(state!=Qt.Checked))
+
+        self.klocekLiczbaKlockow = QLineEdit()
+        self.klocekLiczbaKlockow.setReadOnly(klocekBtn.checkState()!=Qt.Checked)
+        klocekBtn.stateChanged.connect(lambda state: self.klocekLiczbaKlockow.setReadOnly(state!=Qt.Checked))
+
+        self.klocekMaksCisnienie = QLineEdit()
+        self.klocekMaksCisnienie.setReadOnly(klocekBtn.checkState()!=Qt.Checked)
+        klocekBtn.stateChanged.connect(lambda state: self.klocekMaksCisnienie.setReadOnly(state!=Qt.Checked))
+
+        self.klocekWewnetrznaSrednica = QLineEdit()
+        self.klocekWewnetrznaSrednica.setReadOnly(klocekBtn.checkState()!=Qt.Checked)
+        klocekBtn.stateChanged.connect(lambda state: self.klocekWewnetrznaSrednica.setReadOnly(state!=Qt.Checked))
+
+        self.klocekZewnetrznaSrednica = QLineEdit()
+        self.klocekZewnetrznaSrednica.setReadOnly(klocekBtn.checkState()!=Qt.Checked)
+        klocekBtn.stateChanged.connect(lambda state: self.klocekZewnetrznaSrednica.setReadOnly(state!=Qt.Checked))
+
+        self.klocekeDlugoscOrurowania = QLineEdit()
+        self.klocekeDlugoscOrurowania.setReadOnly(klocekBtn.checkState()!=Qt.Checked)
+        klocekBtn.stateChanged.connect(lambda state: self.klocekeDlugoscOrurowania.setReadOnly(state!=Qt.Checked))
+
+        #PIASECZNICE
+        self.piasLiczbaDysz = QLineEdit()
+        self.piasLiczbaDysz.setReadOnly(piaseczniceBtn.checkState()!=Qt.Checked)
+        piaseczniceBtn.stateChanged.connect(lambda state: self.piasLiczbaDysz.setReadOnly(state!=Qt.Checked))
+
+        self.piasPobor = QLineEdit()
+        self.piasPobor.setReadOnly(piaseczniceBtn.checkState()!=Qt.Checked)
+        piaseczniceBtn.stateChanged.connect(lambda state: self.piasPobor.setReadOnly(state!=Qt.Checked))
+
+        self.piasCzas = QLineEdit()
+        self.piasCzas.setReadOnly(piaseczniceBtn.checkState()!=Qt.Checked)
+        piaseczniceBtn.stateChanged.connect(lambda state: self.piasCzas.setReadOnly(state!=Qt.Checked))
+
+        #SMAROWNICE
+        self.smarLiczbaZaworow = QLineEdit()
+        self.smarLiczbaZaworow.setReadOnly(smarowniceBtn.checkState()!=Qt.Checked)
+        smarowniceBtn.stateChanged.connect(lambda state: self.smarLiczbaZaworow.setReadOnly(state!=Qt.Checked))
+
+        self.smarPobor = QLineEdit()
+        self.smarPobor.setReadOnly(smarowniceBtn.checkState()!=Qt.Checked)
+        smarowniceBtn.stateChanged.connect(lambda state: self.smarPobor.setReadOnly(state!=Qt.Checked))
+
+        self.smarCzas = QLineEdit()
+        self.smarCzas.setReadOnly(smarowniceBtn.checkState()!=Qt.Checked)
+        smarowniceBtn.stateChanged.connect(lambda state: self.smarCzas.setReadOnly(state!=Qt.Checked))
+
+        #SYRENY
+        self.syrenyLiczba = QLineEdit()
+        self.syrenyLiczba.setReadOnly(syrenyBtn.checkState()!=Qt.Checked)
+        syrenyBtn.stateChanged.connect(lambda state: self.syrenyLiczba.setReadOnly(state!=Qt.Checked))
+
+        self.syrenyPobor = QLineEdit()
+        self.syrenyPobor.setReadOnly(syrenyBtn.checkState()!=Qt.Checked)
+        syrenyBtn.stateChanged.connect(lambda state: self.syrenyPobor.setReadOnly(state!=Qt.Checked))
+
+        self.syrenyCzas = QLineEdit()
+        self.syrenyCzas.setReadOnly(syrenyBtn.checkState()!=Qt.Checked)
+        syrenyBtn.stateChanged.connect(lambda state: self.syrenyCzas.setReadOnly(state!=Qt.Checked))
+
+        #WC
+        self.wcLiczba = QLineEdit()
+        self.wcLiczba.setReadOnly(wcBtn.checkState()!=Qt.Checked)
+        wcBtn.stateChanged.connect(lambda state: self.wcLiczba.setReadOnly(state!=Qt.Checked))
+
+        self.wcPobor = QLineEdit()
+        self.wcPobor.setReadOnly(wcBtn.checkState()!=Qt.Checked)
+        wcBtn.stateChanged.connect(lambda state: self.wcPobor.setReadOnly(state!=Qt.Checked))
+
+        self.zbiornkiGlowny = QLineEdit()
+        self.zbiornikiZawieszenia = QLineEdit()
+        self.zbiornikiHamulcy = QLineEdit()
+        self.zbiornikiPozostale = QLineEdit()
+
+        ukladT.addWidget(self.nazwaCzlonuEdt, 0, 1)
+
+        ukladT.addWidget(self.hamulceLiczbaCylidnrowEdt, 2, 1)
+        ukladT.addWidget(self.hamulceMartwaObjetosc, 3, 1)
+        ukladT.addWidget(self.hamulcePoleTloka, 4, 1)
+        ukladT.addWidget(self.hamulceCisnienieCylindra, 5, 1)
+        ukladT.addWidget(self.hamulceSkokCylindra, 6, 1)
+        ukladT.addWidget(self.hamulceSrednicaWewnetrzna, 7, 1)
+        ukladT.addWidget(self.hamulceSrednicaZewnetrzna, 8, 1)
+        ukladT.addWidget(self.hamulceDlugoscOrurowania, 9, 1)
+
+        ukladT.addWidget(self.zawieszenieObjetoscMiecha, 2, 3)
+        ukladT.addWidget(self.zawieszenieLiczbaMiechow, 3, 3)
+        ukladT.addWidget(self.zawieszenieCisnieniePusty, 4, 3)
+        ukladT.addWidget(self.zawieszenieCisnieniePelny, 5, 3)
+        ukladT.addWidget(self.zawieszenieLiczbaZaworow, 6, 3)
+        ukladT.addWidget(self.zawieszeniePoborPowietrza, 7, 3)
+
+        ukladT.addWidget(self.klocekObjetoscSkokowa, 2, 5)
+        ukladT.addWidget(self.klocekLiczbaKlockow, 3, 5)
+        ukladT.addWidget(self.klocekMaksCisnienie, 4, 5)
+        ukladT.addWidget(self.klocekWewnetrznaSrednica, 5, 5)
+        ukladT.addWidget(self.klocekZewnetrznaSrednica, 6, 5)
+        ukladT.addWidget(self.klocekeDlugoscOrurowania, 7, 5)
+
+        ukladT.addWidget(self.piasLiczbaDysz, 11, 1)
+        ukladT.addWidget(self.piasPobor, 12, 1)
+        ukladT.addWidget(self.piasCzas, 13, 1)
+
+        ukladT.addWidget(self.smarLiczbaZaworow, 11, 3)
+        ukladT.addWidget(self.smarPobor, 12, 3)
+        ukladT.addWidget(self.smarCzas, 13, 3)
+
+        ukladT.addWidget(self.syrenyLiczba, 11, 5)
+        ukladT.addWidget(self.syrenyPobor, 12, 5)
+        ukladT.addWidget(self.syrenyCzas, 13, 5)
+
+        ukladT.addWidget(self.wcLiczba, 11, 7)
+        ukladT.addWidget(self.wcPobor, 12, 7)
+
+        ukladT.addWidget(self.zbiornkiGlowny, 2, 7)
+        ukladT.addWidget(self.zbiornikiZawieszenia, 3, 7)
+        ukladT.addWidget(self.zbiornikiHamulcy, 4, 7)
+        ukladT.addWidget(self.zbiornikiPozostale, 5, 7)
 
         # przyciski
         zapiszBtn = QPushButton("&Zapisz", self)
@@ -192,8 +466,8 @@ class WindowCzlon(QWidget):
         ukladH = QHBoxLayout()
         ukladH.addWidget(zapiszBtn)
 
-        ukladT.addLayout(ukladH, 4, 0, 1, 3)
-        ukladT.addWidget(wsteczBtn, 5, 0, 1, 3)
+        ukladT.addLayout(ukladH, 14, 7, 1, 1)
+        ukladT.addWidget(wsteczBtn, 14, 0, 1, 1)
 
         # przypisanie utworzonego układu do okna
         self.setLayout(ukladT)
@@ -201,10 +475,10 @@ class WindowCzlon(QWidget):
         wsteczBtn.clicked.connect(self.wstecz)
         zapiszBtn.clicked.connect(self.wstecz)
 
-        self.nazwaSprężarkiEdt.setFocus()
+        self.nazwaCzlonuEdt.setFocus()
         self.setGeometry(300, 100, 1400, 800)
         self.setWindowIcon(QIcon('lukasiewicz.png'))
-        self.setWindowTitle("Nowa sprężarka")
+        self.setWindowTitle("Nowy czlon")
         self.show()
 
 class WindowBadanie(QWidget):
@@ -215,13 +489,13 @@ class WindowBadanie(QWidget):
     def wstecz(self):
         self.w = Menu()
         self.w.show()
-        self.hide()
+        self.close()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             self.w = Menu()
             self.w.show()
-            self.hide()
+            self.close()
 
     def interfejs(self):
 
@@ -238,7 +512,6 @@ class WindowBadanie(QWidget):
         ukladT.addWidget(etykietaIlosc, 2, 2)
         ukladT.addWidget(etykietaCzlon, 2, 0)
 
-        # 1-liniowe pola edycyjne
         self.nazwaBadaniaEdt = QLineEdit()
         self.trasaEdt = QComboBox(self)
         for v in ('E51', 'E59', 'E69'):
@@ -285,17 +558,10 @@ class Menu(QWidget):
     def koniec(self):
         self.close()
 
-    def closeEvent(self, event):
-
-        odp = QMessageBox.question(
-            self, 'Komunikat',
-            "Czy na pewno koniec?",
-            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-
-        if odp == QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
+    def wstecz(self):
+        self.w = Menu()
+        self.w.show()
+        self.close()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
@@ -304,6 +570,7 @@ class Menu(QWidget):
     def interfejs(self):
         # przypisanie widgetów do układu tabelarycznego
         ukladT = QGridLayout()
+
         # przyciski
         dodajSprezarkeBtn = QPushButton("Dodaj spręzarkę", self)
         dodajTraseBtn = QPushButton("Dodaj trasę", self)
@@ -338,22 +605,22 @@ class Menu(QWidget):
     def dodajSprezarke(self):
         self.w = WindowSprezarka()
         self.w.show()
-        self.hide()
+        self.close()
 
     def dodajTrase(self):
         self.w = WindowTrasa()
         self.w.show()
-        self.hide()
+        self.close()
 
     def dodajCzlon(self):
         self.w = WindowCzlon()
         self.w.show()
-        self.hide()
+        self.close()
 
     def dodajBadanie(self):
         self.w = WindowBadanie()
         self.w.show()
-        self.hide()
+        self.close()
 
 if __name__ == '__main__':
     import sys
