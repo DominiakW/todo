@@ -18,6 +18,16 @@ class WindowSprezarka(QWidget):
         self.w.show()
         self.close()
 
+    def zapisz(self):
+        lista=[self.wydajnoscEdt.text(), self.pmaxEdt.text(), self.pminEdt.text()]
+        plik=open(self.nazwaSprężarkiEdt.text()+".txt", "w")
+        for i in (lista):
+            plik.write(i+"\n")
+        plik.close
+        self.w = Menu()
+        self.w.show()
+        self.close()
+
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             self.w = Menu()
@@ -28,9 +38,9 @@ class WindowSprezarka(QWidget):
 
         # etykiety
         etykietaNazwaSprężarki = QLabel("Nazwa sprężarki:", self)
-        etykietaWydajnosc = QLabel("Wydajność układu - Qcomp+AD [l/min]:", self)
-        etykietaPmax = QLabel("Ciśnienie maksymalne - pmax [bar]:", self)
-        etykietaPmin = QLabel("Ciśnienie minimalne - pmin [bar]:", self)
+        etykietaWydajnosc = QLabel("Wydajność układu [l/min]:", self)
+        etykietaPmax = QLabel("Ciśnienie maksymalne [bar]:", self)
+        etykietaPmin = QLabel("Ciśnienie minimalne [bar]:", self)
 
         # przypisanie widgetów do układu tabelarycznego
         ukladT = QGridLayout()
@@ -64,7 +74,7 @@ class WindowSprezarka(QWidget):
         self.setLayout(ukladT)
 
         wsteczBtn.clicked.connect(self.wstecz)
-        zapiszBtn.clicked.connect(self.wstecz)
+        zapiszBtn.clicked.connect(self.zapisz)
 
         self.nazwaSprężarkiEdt.setFocus()
         self.setGeometry(800, 400, 400, 300)
@@ -82,6 +92,19 @@ class WindowTrasa(QWidget):
         self.w.show()
         self.close()
 
+    def zapisz(self):
+        liczbaStacjiNaGodzine=float(self.liczbaStacjiEdt.text())/(float(self.czasPodrozyEdt.text())/60)
+        sredniCzas=float(self.czasPodrozyEdt.text())*60/float(self.liczbaStacjiEdt.text())
+        tdyn=sredniCzas-float(self.czasPostojuEdt.text())
+        lista=[self.predkoscEdt.text(), self.liczbaStacjiEdt.text(), self.czasPodrozyEdt.text(), str(liczbaStacjiNaGodzine), str(sredniCzas), self.czasPostojuEdt.text(), str(tdyn)]
+        plik=open(self.nazwaTrasyEdt.text()+".txt", "w")
+        for i in (lista):
+            plik.write(i+"\n")
+        plik.close
+        self.w = Menu()
+        self.w.show()
+        self.close()
+
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             self.w = Menu()
@@ -92,10 +115,10 @@ class WindowTrasa(QWidget):
 
         # etykiety
         etykietaNazwaTrasy = QLabel("Nazwa trasy:", self)
-        etykietaPredkosc = QLabel("Średnia prędkość - V [km/h]:", self)
-        etykietaLiczbaStacji = QLabel("Liczba stacji (bez 1.) - ns:", self)
-        etykietaCzasPodrozy = QLabel("Całkowity czas podróży - T [min]:", self)
-        etykietaCzasPostoju = QLabel("Średni czas postoju - tstat [s]:", self)
+        etykietaPredkosc = QLabel("Średnia prędkość [km/h]:", self)
+        etykietaLiczbaStacji = QLabel("Liczba stacji (bez 1.):", self)
+        etykietaCzasPodrozy = QLabel("Całkowity czas podróży [min]:", self)
+        etykietaCzasPostoju = QLabel("Średni czas postoju [s]:", self)
 
         # przypisanie widgetów do układu tabelarycznego
         ukladT = QGridLayout()
@@ -132,7 +155,7 @@ class WindowTrasa(QWidget):
         self.setLayout(ukladT)
 
         wsteczBtn.clicked.connect(self.wstecz)
-        zapiszBtn.clicked.connect(self.wstecz)
+        zapiszBtn.clicked.connect(self.zapisz)
 
         self.nazwaTrasyEdt.setFocus()
         self.setGeometry(800, 400, 400, 300)
@@ -146,6 +169,28 @@ class WindowCzlon(QWidget):
         self.interfejs()
 
     def wstecz(self):
+        self.w = Menu()
+        self.w.show()
+        self.close()
+
+    def zapisz(self):
+        pOtoczenia=1
+
+        #def Hamulce1
+        haumlcePojemnoscRobocza=float(self.hamulcePoleTloka.text())*float(self.hamulceSkokCylindra.text())/100
+        hamulcePoborPowietrzaNaPojazd=float(self.hamulceLiczbaCylidnrowEdt.text())*((float(self.hamulceCisnienieCylindra.text())+pOtoczenia)*haumlcePojemnoscRobocza+float(self.hamulceCisnienieCylindra.text())*float(self.hamulceMartwaObjetosc.text()))/pOtoczenia
+
+        #def Hamulce2
+        hamulcePolePowierzchniRury=3.142/4*(float(self.hamulceSrednicaZewnetrzna.text())-2*float(self.hamulceSrednicaWewnetrzna.text()))*(float(self.hamulceSrednicaZewnetrzna.text())-2*float(self.hamulceSrednicaWewnetrzna.text()))/10000
+        hamulcePoborPowietrzaRury=float(self.hamulceCisnienieCylindra.text())*hamulcePolePowierzchniRury*float(self.hamulceDlugoscOrurowania.text())*10/pOtoczenia
+
+        listaCzlon=[str(hamulcePoborPowietrzaNaPojazd),str(hamulcePoborPowietrzaRury)]
+
+        plik=open(self.nazwaCzlonuEdt.text()+".txt", "w")
+        for i in (listaCzlon):
+            plik.write(i+"\n")
+        plik.close
+
         self.w = Menu()
         self.w.show()
         self.close()
@@ -277,7 +322,7 @@ class WindowCzlon(QWidget):
 
         self.nazwaCzlonuEdt = QLineEdit()
 
-        #HAMULCE
+        #HAMULCE1
         self.hamulceLiczbaCylidnrowEdt = QLineEdit()
         self.hamulceLiczbaCylidnrowEdt.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
         hamulceBtn.stateChanged.connect(lambda state: self.hamulceLiczbaCylidnrowEdt.setReadOnly(state!=Qt.Checked))
@@ -298,6 +343,7 @@ class WindowCzlon(QWidget):
         self.hamulceSkokCylindra.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
         hamulceBtn.stateChanged.connect(lambda state: self.hamulceSkokCylindra.setReadOnly(state!=Qt.Checked))
 
+        #Hamulce2
         self.hamulceSrednicaWewnetrzna = QLineEdit()
         self.hamulceSrednicaWewnetrzna.setReadOnly(hamulceBtn.checkState()!=Qt.Checked)
         hamulceBtn.stateChanged.connect(lambda state: self.hamulceSrednicaWewnetrzna.setReadOnly(state!=Qt.Checked))
@@ -408,6 +454,7 @@ class WindowCzlon(QWidget):
         self.wcPobor.setReadOnly(wcBtn.checkState()!=Qt.Checked)
         wcBtn.stateChanged.connect(lambda state: self.wcPobor.setReadOnly(state!=Qt.Checked))
 
+        #ZBIORNIKI
         self.zbiornkiGlowny = QLineEdit()
         self.zbiornikiZawieszenia = QLineEdit()
         self.zbiornikiHamulcy = QLineEdit()
@@ -473,7 +520,7 @@ class WindowCzlon(QWidget):
         self.setLayout(ukladT)
 
         wsteczBtn.clicked.connect(self.wstecz)
-        zapiszBtn.clicked.connect(self.wstecz)
+        zapiszBtn.clicked.connect(self.zapisz)
 
         self.nazwaCzlonuEdt.setFocus()
         self.setGeometry(300, 100, 1400, 800)
