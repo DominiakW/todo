@@ -184,7 +184,35 @@ class WindowCzlon(QWidget):
         hamulcePolePowierzchniRury=3.142/4*(float(self.hamulceSrednicaZewnetrzna.text())-2*float(self.hamulceSrednicaWewnetrzna.text()))*(float(self.hamulceSrednicaZewnetrzna.text())-2*float(self.hamulceSrednicaWewnetrzna.text()))/10000
         hamulcePoborPowietrzaRury=float(self.hamulceCisnienieCylindra.text())*hamulcePolePowierzchniRury*float(self.hamulceDlugoscOrurowania.text())*10/pOtoczenia
 
-        listaCzlon=[str(hamulcePoborPowietrzaNaPojazd),str(hamulcePoborPowietrzaRury)]
+        #def Zawieszenie
+        zawieszenieStatPobor=float(self.zawieszenieLiczbaMiechow.text())*(float(self.zawieszenieCisnieniePelny.text())-float(self.zawieszenieCisnieniePusty.text()))*float(self.zawieszenieObjetoscMiecha.text())/pOtoczenia
+        zawieszenieDynPobor=float(self.zawieszenieLiczbaZaworow.text())*float(self.zawieszeniePoborPowietrza.text())
+
+        #def Klocek
+        klocekPoborCylinder=float(self.klocekLiczbaKlockow.text())*float(self.klocekObjetoscSkokowa.text())*(float(self.klocekMaksCisnienie.text())+pOtoczenia)/pOtoczenia
+        klocekPolePowierzchniRury=3.142/4*(float(self.klocekZewnetrznaSrednica.text())-2*float(self.klocekWewnetrznaSrednica.text()))*(float(self.klocekZewnetrznaSrednica.text())-2*float(self.klocekWewnetrznaSrednica.text()))/10000
+        klocekPoborRury=klocekPolePowierzchniRury*float(self.klocekeDlugoscOrurowania.text())*10*float(self.klocekMaksCisnienie.text())/pOtoczenia
+        klocekPobor=klocekPoborRury+klocekPoborCylinder
+
+        #def Piasecznice
+        piasecznicePobor=float(self.piasLiczbaDysz.text())*float(self.piasPobor.text())*float(self.piasCzas.text())/60
+
+        #def Smarownice
+        smarownicePobor=float(self.smarLiczbaZaworow.text())*float(self.smarPobor.text())*float(self.smarCzas.text())/60
+
+        #def Syreny
+        syrenyPobor=float(self.syrenyLiczba.text())*float(self.syrenyPobor.text())*float(self.syrenyCzas.text())/60
+
+        #def WC
+        wcPobor=float(self.wcLiczba.text())*float(self.wcPobor.text())
+
+        #def Wycieki
+        wyciekiPoleRury=3.142/4*(float(self.zbiornikiRurySredZew.text())-2*float(self.zbiornikiRurySredWew.text()))*(float(self.zbiornikiRurySredZew.text())-2*float(self.zbiornikiRurySredWew.text()))/10000
+        wyciekiObjetoscRur=wyciekiPoleRury*float(self.zbiornikiDlugoscOrurowania.text())*10
+        wyciekiObjetosc=float(self.zbiornkiGlowny.text())+wyciekiObjetoscRur
+
+        listaCzlon=[str(hamulcePoborPowietrzaNaPojazd),str(hamulcePoborPowietrzaRury),str(zawieszenieStatPobor),str(zawieszenieDynPobor),
+                    str(klocekPobor), str(piasecznicePobor), str(smarownicePobor), str(syrenyPobor), str(wcPobor), str(wyciekiObjetosc)]
 
         plik=open(self.nazwaCzlonuEdt.text()+".txt", "w")
         for i in (listaCzlon):
@@ -204,15 +232,15 @@ class WindowCzlon(QWidget):
     def interfejs(self):
 
         # etykiety
-        etykietaNazwaCzlonu = QLabel("Nazwa czlonu:", self)
+        etykietaNazwaCzlonu = QLabel("Nazwa członu:", self)
 
         etykietaHamulceLiczbaCylidnrow = QLabel("Liczba cylindrów [-]:", self)
-        etykietaHamulceMartwaObjetosc = QLabel("Martwa objętość cylidnra [l]:", self)
-        etykietaHamulcePoleTloka = QLabel("Powierzchnia tloka [dm]:", self)
-        etykietaHamulceCisnienieCylindra = QLabel("Ciśnienie cylidnra przy hamowaniu [bar]:", self)
+        etykietaHamulceMartwaObjetosc = QLabel("Martwa objętość cylindra [l]:", self)
+        etykietaHamulcePoleTloka = QLabel("Powierzchnia tłoka [dm]:", self)
+        etykietaHamulceCisnienieCylindra = QLabel("Ciśnienie cylindra przy hamowaniu [bar]:", self)
         etykietaHamulceSkokCylindra = QLabel("Skok cylindra [mm]:", self)
-        etykietaHamulceSrednicaWewnetrzna = QLabel("Srednica wewnętrzna rur: [mm]:", self)
-        etykietaHamulceSrednicaZewnetrzna = QLabel("Srednica zewnętrzna rur: [mm]:", self)
+        etykietaHamulceSrednicaWewnetrzna = QLabel("Średnica wewnętrzna rur: [mm]:", self)
+        etykietaHamulceSrednicaZewnetrzna = QLabel("Średnica zewnętrzna rur: [mm]:", self)
         etykietaHamulceDlugoscOrurowania = QLabel("Długość orurowania: [m]:", self)
 
         etykietaZawieszenieObjetoscMiecha = QLabel("Objętość pojedyńczego miecha [l]:", self)
@@ -233,7 +261,7 @@ class WindowCzlon(QWidget):
         etykietaPiasPobor = QLabel("Pobór powietrza [l/min]:", self)
         etykietaPiasCzas = QLabel("Czas aplikacji [s]:", self)
 
-        etykietaSmarLiczbaZaworow = QLabel("Liczba zaworow [-]:", self)
+        etykietaSmarLiczbaZaworow = QLabel("Liczba zaworów [-]:", self)
         etykietaSmarPobor = QLabel("Pobór powietrza przez zawór [l/min]:", self)
         etykietaSmarCzas = QLabel("Czas aplikacji [s]:", self)
 
@@ -249,6 +277,9 @@ class WindowCzlon(QWidget):
         etykietaZbiornikiZawieszenia = QLabel("Objętość zbiorników zawieszenia [l]:", self)
         etykietaZbiornikiHamulcy = QLabel("Objętość zbiorników hamulcowych [l]:", self)
         etykietaZbiornikiPozostale = QLabel("Objętość zbiorników pozostałych [l]:", self)
+        etykietaZbiornikiRuryDlugosc = QLabel("Długość orurowania zbiornika głównego [m]:", self)
+        etykietaZbiornikiRuraWew = QLabel("Średnica wewnętrzna rur [mm]:", self)
+        etykietaZbiornikiRuraZew = QLabel("Średnica zewnętrzna rur [mm]:", self)
 
         # przypisanie widgetów do układu tabelarycznego
         ukladT = QGridLayout()
@@ -297,6 +328,9 @@ class WindowCzlon(QWidget):
         ukladT.addWidget(etykietaZbiornikiZawieszenia, 3, 6)
         ukladT.addWidget(etykietaZbiornikiHamulcy, 4, 6)
         ukladT.addWidget(etykietaZbiornikiPozostale, 5, 6)
+        ukladT.addWidget(etykietaZbiornikiRuryDlugosc, 6, 6)
+        ukladT.addWidget(etykietaZbiornikiRuraWew, 7, 6)
+        ukladT.addWidget(etykietaZbiornikiRuraZew, 8, 6)
 
         #checkboxy
         hamulceBtn = QCheckBox("Hamulce", self)
@@ -311,7 +345,7 @@ class WindowCzlon(QWidget):
         piaseczniceBtn = QCheckBox("Piasecznice", self)
         ukladT.addWidget(piaseczniceBtn, 10, 0)
 
-        smarowniceBtn = QCheckBox("Smaorwnice obrzeży kół", self)
+        smarowniceBtn = QCheckBox("Smarownice obrzeży kół", self)
         ukladT.addWidget(smarowniceBtn, 10, 2)
 
         syrenyBtn = QCheckBox("Syreny", self)
@@ -459,6 +493,19 @@ class WindowCzlon(QWidget):
         self.zbiornikiZawieszenia = QLineEdit()
         self.zbiornikiHamulcy = QLineEdit()
         self.zbiornikiPozostale = QLineEdit()
+        self.zbiornikiDlugoscOrurowania = QLineEdit()
+        self.zbiornikiRurySredWew = QLineEdit()
+        self.zbiornikiRurySredZew = QLineEdit()
+
+        listaZerowanie =[self.hamulceLiczbaCylidnrowEdt, self.hamulceMartwaObjetosc, self.hamulcePoleTloka, self.hamulceCisnienieCylindra,
+         self.hamulceCisnienieCylindra,self.hamulceSkokCylindra,self.hamulceSrednicaWewnetrzna,self.hamulceSrednicaZewnetrzna,self.hamulceDlugoscOrurowania,
+         self.zawieszenieObjetoscMiecha,self.zawieszenieLiczbaMiechow,self.zawieszenieCisnieniePusty,self.zawieszenieCisnieniePelny,self.zawieszenieLiczbaZaworow,
+         self.zawieszeniePoborPowietrza,self.klocekObjetoscSkokowa,self.klocekLiczbaKlockow,self.klocekMaksCisnienie,self.klocekWewnetrznaSrednica,
+         self.klocekZewnetrznaSrednica,self.klocekeDlugoscOrurowania,self.piasLiczbaDysz,self.piasPobor,self.piasCzas,self.smarLiczbaZaworow,self.smarPobor,
+         self.smarCzas,self.syrenyLiczba,self.syrenyPobor,self.syrenyCzas,self.wcLiczba,self.wcPobor,self.zbiornkiGlowny,self.zbiornikiZawieszenia,
+         self.zbiornikiHamulcy,self.zbiornikiPozostale,self.zbiornikiDlugoscOrurowania,self.zbiornikiRurySredZew, self.zbiornikiRurySredWew]
+        for i in (listaZerowanie):
+             i.setText("0")
 
         ukladT.addWidget(self.nazwaCzlonuEdt, 0, 1)
 
@@ -504,6 +551,9 @@ class WindowCzlon(QWidget):
         ukladT.addWidget(self.zbiornikiZawieszenia, 3, 7)
         ukladT.addWidget(self.zbiornikiHamulcy, 4, 7)
         ukladT.addWidget(self.zbiornikiPozostale, 5, 7)
+        ukladT.addWidget(self.zbiornikiDlugoscOrurowania, 6, 7)
+        ukladT.addWidget(self.zbiornikiRurySredWew, 7, 7)
+        ukladT.addWidget(self.zbiornikiRurySredZew, 8, 7)
 
         # przyciski
         zapiszBtn = QPushButton("&Zapisz", self)
@@ -525,7 +575,7 @@ class WindowCzlon(QWidget):
         self.nazwaCzlonuEdt.setFocus()
         self.setGeometry(300, 100, 1400, 800)
         self.setWindowIcon(QIcon('lukasiewicz.png'))
-        self.setWindowTitle("Nowy czlon")
+        self.setWindowTitle("Nowy człon")
         self.show()
 
 class WindowBadanie(QWidget):
@@ -619,7 +669,7 @@ class Menu(QWidget):
         ukladT = QGridLayout()
 
         # przyciski
-        dodajSprezarkeBtn = QPushButton("Dodaj spręzarkę", self)
+        dodajSprezarkeBtn = QPushButton("Dodaj sprężarkę", self)
         dodajTraseBtn = QPushButton("Dodaj trasę", self)
         dodajCzlonBtn = QPushButton("Dodaj człon", self)
         noweBadanieBtn = QPushButton("Nowe badanie", self)
