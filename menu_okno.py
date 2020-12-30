@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QLabel, QGridLayout
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox, QCheckBox
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
+import os
 
 class WindowSprezarka(QWidget):
     def __init__(self):
@@ -20,7 +21,7 @@ class WindowSprezarka(QWidget):
 
     def zapisz(self):
         lista=[self.wydajnoscEdt.text(), self.pmaxEdt.text(), self.pminEdt.text()]
-        plik=open(self.nazwaSprężarkiEdt.text()+".txt", "w")
+        plik=open('WIPS\Sprezarki\\'+self.nazwaSprężarkiEdt.text()+".txt", "w")
         for i in (lista):
             plik.write(i+"\n")
         plik.close
@@ -78,7 +79,7 @@ class WindowSprezarka(QWidget):
 
         self.nazwaSprężarkiEdt.setFocus()
         self.setGeometry(800, 400, 400, 300)
-        self.setWindowIcon(QIcon('lukasiewicz.png'))
+        self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
         self.setWindowTitle("Nowa sprężarka")
         self.show()
 
@@ -97,7 +98,7 @@ class WindowTrasa(QWidget):
         sredniCzas=float(self.czasPodrozyEdt.text())*60/float(self.liczbaStacjiEdt.text())
         tdyn=sredniCzas-float(self.czasPostojuEdt.text())
         lista=[self.predkoscEdt.text(), self.liczbaStacjiEdt.text(), self.czasPodrozyEdt.text(), str(liczbaStacjiNaGodzine), str(sredniCzas), self.czasPostojuEdt.text(), str(tdyn)]
-        plik=open(self.nazwaTrasyEdt.text()+".txt", "w")
+        plik=open('WIPS\Trasy\\'+self.nazwaTrasyEdt.text()+".txt", "w")
         for i in (lista):
             plik.write(i+"\n")
         plik.close
@@ -159,7 +160,7 @@ class WindowTrasa(QWidget):
 
         self.nazwaTrasyEdt.setFocus()
         self.setGeometry(800, 400, 400, 300)
-        self.setWindowIcon(QIcon('lukasiewicz.png'))
+        self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
         self.setWindowTitle("Nowa trasa")
         self.show()
 
@@ -214,7 +215,8 @@ class WindowCzlon(QWidget):
         listaCzlon=[str(hamulcePoborPowietrzaNaPojazd),str(hamulcePoborPowietrzaRury),str(zawieszenieStatPobor),str(zawieszenieDynPobor),
                     str(klocekPobor), str(piasecznicePobor), str(smarownicePobor), str(syrenyPobor), str(wcPobor), str(wyciekiObjetosc)]
 
-        plik=open(self.nazwaCzlonuEdt.text()+".txt", "w")
+        plik=open('WIPS\Czlony\\'+self.nazwaCzlonuEdt.text()+".txt", "w")
+
         for i in (listaCzlon):
             plik.write(i+"\n")
         plik.close
@@ -228,6 +230,44 @@ class WindowCzlon(QWidget):
             self.w = Menu()
             self.w.show()
             self.close()
+
+    def zerowanieHamulcy(self):
+        listaHamulce=[self.hamulceLiczbaCylidnrowEdt, self.hamulceMartwaObjetosc, self.hamulcePoleTloka, self.hamulceCisnienieCylindra,
+        self.hamulceCisnienieCylindra,self.hamulceSkokCylindra,self.hamulceSrednicaWewnetrzna,self.hamulceSrednicaZewnetrzna,self.hamulceDlugoscOrurowania]
+        for i in (listaHamulce):
+            i.setText("0")
+
+    def zerowanieZawieszenia(self):
+        listaZawieszenie=[self.zawieszenieObjetoscMiecha,self.zawieszenieLiczbaMiechow,self.zawieszenieCisnieniePusty,self.zawieszenieCisnieniePelny,self.zawieszenieLiczbaZaworow,
+         self.zawieszeniePoborPowietrza]
+        for i in (listaZawieszenie):
+            i.setText("0")
+
+    def zerowanieKlocka(self):
+        listaKlocka=[self.klocekObjetoscSkokowa,self.klocekLiczbaKlockow,self.klocekMaksCisnienie,self.klocekWewnetrznaSrednica,
+         self.klocekZewnetrznaSrednica,self.klocekeDlugoscOrurowania]
+        for i in (listaKlocka):
+            i.setText("0")
+
+    def zerowaniePiasecznic(self):
+        listaPias=[self.piasLiczbaDysz,self.piasPobor,self.piasCzas]
+        for i in (listaPias):
+            i.setText("0")
+
+    def zerowanieSmarownic (self):
+        listaSmar=[self.smarLiczbaZaworow,self.smarPobor, self.smarCzas]
+        for i in (listaSmar):
+            i.setText("0")
+
+    def zerowanieSyren (self):
+        listaSyren=[self.syrenyLiczba,self.syrenyPobor,self.syrenyCzas]
+        for i in (listaSyren):
+            i.setText("0")
+
+    def zerowanieWc (self):
+        listaWc=[self.wcLiczba,self.wcPobor]
+        for i in (listaWc):
+            i.setText("0")
 
     def interfejs(self):
 
@@ -497,6 +537,14 @@ class WindowCzlon(QWidget):
         self.zbiornikiRurySredWew = QLineEdit()
         self.zbiornikiRurySredZew = QLineEdit()
 
+        hamulceBtn.clicked.connect(self.zerowanieHamulcy)
+        zawieszenieBtn.clicked.connect(self.zerowanieZawieszenia)
+        klocekBtn.clicked.connect(self.zerowanieKlocka)
+        piaseczniceBtn.clicked.connect(self.zerowaniePiasecznic)
+        smarowniceBtn.clicked.connect(self.zerowanieSmarownic)
+        syrenyBtn.clicked.connect(self.zerowanieSyren)
+        wcBtn.clicked.connect(self.zerowanieWc)
+
         listaZerowanie =[self.hamulceLiczbaCylidnrowEdt, self.hamulceMartwaObjetosc, self.hamulcePoleTloka, self.hamulceCisnienieCylindra,
          self.hamulceCisnienieCylindra,self.hamulceSkokCylindra,self.hamulceSrednicaWewnetrzna,self.hamulceSrednicaZewnetrzna,self.hamulceDlugoscOrurowania,
          self.zawieszenieObjetoscMiecha,self.zawieszenieLiczbaMiechow,self.zawieszenieCisnieniePusty,self.zawieszenieCisnieniePelny,self.zawieszenieLiczbaZaworow,
@@ -504,6 +552,7 @@ class WindowCzlon(QWidget):
          self.klocekZewnetrznaSrednica,self.klocekeDlugoscOrurowania,self.piasLiczbaDysz,self.piasPobor,self.piasCzas,self.smarLiczbaZaworow,self.smarPobor,
          self.smarCzas,self.syrenyLiczba,self.syrenyPobor,self.syrenyCzas,self.wcLiczba,self.wcPobor,self.zbiornkiGlowny,self.zbiornikiZawieszenia,
          self.zbiornikiHamulcy,self.zbiornikiPozostale,self.zbiornikiDlugoscOrurowania,self.zbiornikiRurySredZew, self.zbiornikiRurySredWew]
+
         for i in (listaZerowanie):
              i.setText("0")
 
@@ -574,7 +623,7 @@ class WindowCzlon(QWidget):
 
         self.nazwaCzlonuEdt.setFocus()
         self.setGeometry(300, 100, 1400, 800)
-        self.setWindowIcon(QIcon('lukasiewicz.png'))
+        self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
         self.setWindowTitle("Nowy człon")
         self.show()
 
@@ -584,6 +633,104 @@ class WindowBadanie(QWidget):
         self.interfejs()
 
     def wstecz(self):
+        self.w = Menu()
+        self.w.show()
+        self.close()
+
+    def uruchom(self):
+        badaneListaCzlony=[]
+        badanieListaTrasa=[]
+
+        plikCzlon=open('WIPS\Czlony\\'+str(self.czlonEdt.currentText())+'.txt', "r")
+        for i in plikCzlon:
+            badaneListaCzlony.append(float(i))
+
+        plikTrasa=open('WIPS\Trasy\\'+str(self.trasaEdt.currentText())+'.txt', "r")
+        for i in plikTrasa:
+            badanieListaTrasa.append(float(i))
+
+        #def Hamulce1
+        listaQhamulce=[]
+        listaKbr=[1.05, 1.1,1.15] #kBr min,nor,max
+        for i in (listaKbr):
+            p=badaneListaCzlony[0]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
+            listaQhamulce.append(p)
+
+        listaQ=[[listaQhamulce]]
+        print(listaQ)
+        plik=open('WIPS\Badania\\'+self.nazwaBadaniaEdt.text()+".txt", "w")
+
+        #def Hamulce2
+        listaQhamulce2=[]
+        for i in (listaKbr):
+            p=badaneListaCzlony[1]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
+            listaQhamulce2.append(p)
+
+        #def Zawieszeniestat
+        listaQzawieszenieStat=[]
+        listaKas=[0.05,0.08,0.1]
+        for i in (listaKas):
+            p=badaneListaCzlony[2]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
+            listaQzawieszenieStat.append(p)
+
+        #def Zawieszeniedyn
+        listaQzawieszenieDyn=[]
+        listaKdyn=[0.75,1,1.25]
+        kdyn=(badanieListaTrasa[6]/badanieListaTrasa[4])
+        for i in (listaKdyn):
+            p=badaneListaCzlony[3]*i*float(self.iloscEdt.text())*kdyn
+            listaQzawieszenieDyn.append(p)
+
+        #def Klocek
+        listaQklocek=[]
+        listaKsc=[1.05,1.1,1.15]
+        for i in (listaKsc):
+            p=badaneListaCzlony[4]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
+            listaQklocek.append(p)
+
+        #def Piasecznice
+        listaQPias=[]
+        listaKsdn=[0.05,0.1,0.15]
+        for i in (listaKsdn):
+            p=badaneListaCzlony[5]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
+            listaQPias.append(p)
+
+        #def Smarownica
+        listaQSmar=[]
+        listaNwfl=[1.8*badanieListaTrasa[0],2.8*badanieListaTrasa[0],3.8*badanieListaTrasa[0]]
+        for i in (listaNwfl):
+            p=badaneListaCzlony[6]*i/60*float(self.iloscEdt.text())
+            listaQSmar.append(p)
+
+        #def Syreny
+        listaQSyreny=[]
+        listaKho=[0.05,0.1,0.15]
+        for i in (listaKho):
+            p=badaneListaCzlony[7]*i*(badanieListaTrasa[3]/60)
+            listaQSyreny.append(p)
+
+        #def WC
+        listaQwc=[]
+        listaKwc=[0.8,1,1.2]
+        for i in (listaKwc):
+            p=badaneListaCzlony[8]*i
+            listaQwc.append(p)
+
+        #def Leak
+        listaQwyciek=[]
+        listaqwyciek=[0.05,0.1,0.2]
+        for i in (listaqwyciek):
+            p=badaneListaCzlony[9]*i/3*float(self.iloscEdt.text())
+            listaQwyciek.append(p)
+
+        listaQ=[[listaQhamulce],[listaQhamulce2],[listaQzawieszenieStat],[listaQzawieszenieDyn],[listaQklocek],[listaQPias],[listaQSmar],[listaQSyreny],[listaQwc],[listaQwyciek]]
+        print(listaQ)
+        plik=open('WIPS\Badania\\'+self.nazwaBadaniaEdt.text()+".txt", "w")
+
+        #for i in (lista):
+         #   plik.write(i+"\n")
+        plik.close
+
         self.w = Menu()
         self.w.show()
         self.close()
@@ -599,7 +746,7 @@ class WindowBadanie(QWidget):
         # etykiety
         etykietaNazwaBadania = QLabel("Nazwa badania:", self)
         etykietaTrasa = QLabel("Trasa: ", self)
-        etykietaIlosc = QLabel("Ilosc: ", self)
+        etykietaIlosc = QLabel("Ilość: ", self)
         etykietaCzlon = QLabel("Człon:", self)
 
         # przypisanie widgetów do układu tabelarycznego
@@ -610,12 +757,23 @@ class WindowBadanie(QWidget):
         ukladT.addWidget(etykietaCzlon, 2, 0)
 
         self.nazwaBadaniaEdt = QLineEdit()
+
         self.trasaEdt = QComboBox(self)
-        for v in ('E51', 'E59', 'E69'):
-            self.trasaEdt.addItem(v)
+
+        listaTras=os.listdir('WIPS\Trasy/')
+        for item in (listaTras):
+            if item.endswith(".txt"):
+                item=item[:-4]
+            self.trasaEdt.addItem(item)
+
         self.czlonEdt = QComboBox(self)
-        for v in ('227', '228'):
-            self.czlonEdt.addItem(v)
+
+        listaCzlonow=os.listdir('WIPS\Czlony/')
+        for item in (listaCzlonow):
+            if item.endswith(".txt"):
+                item=item[:-4]
+            self.czlonEdt.addItem(item)
+
         self.iloscEdt = QLineEdit()
 
         ukladT.addWidget(self.nazwaBadaniaEdt, 0, 1)
@@ -638,12 +796,12 @@ class WindowBadanie(QWidget):
         self.setLayout(ukladT)
 
         wsteczBtn.clicked.connect(self.wstecz)
-        uruchomBtn.clicked.connect(self.wstecz)
+        uruchomBtn.clicked.connect(self.uruchom)
 
         self.nazwaBadaniaEdt.setFocus()
         self.setGeometry(800, 400, 400, 300)
-        self.setWindowIcon(QIcon('lukasiewicz.png'))
-        self.setWindowTitle("Nowa sprężarka")
+        self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
+        self.setWindowTitle("Nowe badanie")
         self.show()
 
 class Menu(QWidget):
@@ -695,7 +853,7 @@ class Menu(QWidget):
         noweBadanieBtn.clicked.connect(self.dodajBadanie)
 
         self.setGeometry(800, 400, 200, 200)
-        self.setWindowIcon(QIcon('lukasiewicz.PNG'))
+        self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
         self.setWindowTitle("Menu")
         self.show()
 
