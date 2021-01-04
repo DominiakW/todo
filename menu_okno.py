@@ -4,7 +4,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLabel, QGridLayout
-from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox, QCheckBox
+from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox, QCheckBox, QMessageBox
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
 import os
@@ -743,6 +743,17 @@ class WindowBadanie(QWidget):
             plik.write(str(i)+"\n")
         plik.close
 
+        qnetmin=round(qlistend[0],2)
+        qnetnor=round(qlistend[1],2)
+        qnetmax=round(qlistend[2],2)
+
+        msg=QMessageBox()
+        msg.setWindowTitle("Wyniki")
+        msg.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
+        msg.setText("Zapotrzebowanie EZT na powietrze: ")
+        msg.setInformativeText("Qnet_veh MIN = "+str(qnetmin)+" l/min\nQnet_veh NOR = "+str(qnetnor)+" l/min\nQnet_veh MAX = "+str(qnetmax)+" l/min")
+        msg.exec();
+
         self.w = WindowCykle()
         self.w.show()
         self.close()
@@ -842,7 +853,7 @@ class WindowCykle(QWidget):
         #def Cykle
         listatON=[]
         for i in range (3):
-            p=cykleLista[3]*(cykleSprezarka[1]-cykleSprezarka[2])/1/(cykleSprezarka[0]-cykleLista[i])
+            p=cykleLista[3]*(cykleSprezarka[1]-cykleSprezarka[2])/1/(float(self.sprezarkaIlosc.text())*cykleSprezarka[0]-cykleLista[i])
             listatON.append(p)
 
         listatOFF=[]
@@ -867,11 +878,37 @@ class WindowCykle(QWidget):
 
         listaCykle=[[listatON],[listatOFF],[listatCycle],[listatFcomp],[listatDCcomp]]
 
-        plik=open('WIPS\Badania\\'+self.wynikEdt.currentText()+"_cykle.txt", "w")
+        #def Czas
+        tCharge=(cykleLista[3]*(cykleSprezarka[1]-0)+cykleLista[4]*(3.4-0))/1/(float(self.sprezarkaIlosc.text())*cykleSprezarka[0])
 
-        for i in (listaCykle):
-            for j in range (3):
-                plik.write(str(i[0][j])+"\n")
+        #def zapis
+        plik=open('WIPS\Badania\\'+self.wynikEdt.currentText()+"_raport.txt", "w")
+
+        plik.write("Qnet_veh_MIN = "+str(round(cykleLista[0],2))+" l/min\n")
+        plik.write("Qnet_veh_NOR = "+str(round(cykleLista[1],2))+" l/min\n")
+        plik.write("Qnet_veh_MAX = "+str(round(cykleLista[2],2))+" l/min\n\n")
+
+        plik.write("tON_MIN = "+str(round(listatON[0],2))+" min\n")
+        plik.write("tON_NOR = "+str(round(listatON[1],2))+" min\n")
+        plik.write("tON_MAX = "+str(round(listatON[2],2))+" min\n\n")
+
+        plik.write("tOFF_MIN = "+str(round(listatOFF[0],2))+" min\n")
+        plik.write("tOFF_NOR = "+str(round(listatOFF[1],2))+" min\n")
+        plik.write("tOFF_MAX = "+str(round(listatOFF[2],2))+" min\n\n")
+
+        plik.write("tcycle_MIN = "+str(round(listatCycle[0],2))+" min\n")
+        plik.write("tcycle_NOR = "+str(round(listatCycle[1],2))+" min\n")
+        plik.write("tcycle_MAX = "+str(round(listatCycle[2],2))+" min\n\n")
+
+        plik.write("fcomp_MIN = "+str(round(listatFcomp[0],2))+" 1/h\n")
+        plik.write("fcomp_NOR = "+str(round(listatFcomp[1],2))+" 1/h\n")
+        plik.write("fcomp_MAX = "+str(round(listatFcomp[2],2))+" 1/h\n\n")
+
+        plik.write("DCcomp_MIN = "+str(round(listatDCcomp[0],2))+"%\n")
+        plik.write("DCcomp_NOR = "+str(round(listatDCcomp[1],2))+"%\n")
+        plik.write("DCcomp_MAX = "+str(round(listatDCcomp[2],2))+"%\n\n")
+
+        plik.write("tcharge = " +str(round(tCharge,2))+" min")
         plik.close
 
         self.w = Menu()
