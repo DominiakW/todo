@@ -212,8 +212,13 @@ class WindowCzlon(QWidget):
         wyciekiObjetoscRur=wyciekiPoleRury*float(self.zbiornikiDlugoscOrurowania.text())*10
         wyciekiObjetosc=float(self.zbiornkiGlowny.text())+wyciekiObjetoscRur
 
+        #def Zbiorniki
+        zbiornikTot=(float(self.zbiornkiGlowny.text())+wyciekiObjetoscRur+float(self.zbiornikiZawieszenia.text())+float(self.zbiornikiHamulcy.text())+float(self.zbiornikiPozostale.text()))
+        zbiornikiMiechow=float(self.zawieszenieLiczbaMiechow.text())*float(self.zawieszenieLiczbaMiechow.text())
+
         listaCzlon=[str(hamulcePoborPowietrzaNaPojazd),str(hamulcePoborPowietrzaRury),str(zawieszenieStatPobor),str(zawieszenieDynPobor),
-                    str(klocekPobor), str(piasecznicePobor), str(smarownicePobor), str(syrenyPobor), str(wcPobor), str(wyciekiObjetosc)]
+                    str(klocekPobor), str(piasecznicePobor), str(smarownicePobor), str(syrenyPobor), str(wcPobor), str(wyciekiObjetosc),
+                    str(zbiornikTot), str(zbiornikiMiechow)]
 
         plik=open('WIPS\Czlony\\'+self.nazwaCzlonuEdt.text()+".txt", "w")
 
@@ -656,8 +661,6 @@ class WindowBadanie(QWidget):
             p=badaneListaCzlony[0]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
             listaQhamulce.append(p)
 
-        plik=open('WIPS\Badania\\'+self.nazwaBadaniaEdt.text()+".txt", "w")
-
         #def Hamulce2
         listaQhamulce2=[]
         for i in (listaKbr):
@@ -729,13 +732,18 @@ class WindowBadanie(QWidget):
             for i in (listaQ):
                 qlistend[j]=qlistend[j]+i[0][j]
 
+        vTotVeh=badaneListaCzlony[10]*float(self.iloscEdt.text())
+        vAsVeh=badaneListaCzlony[11]*float(self.iloscEdt.text())
+        qlistend.append(vTotVeh)
+        qlistend.append(vAsVeh)
+
         plik=open('WIPS\Badania\\'+self.nazwaBadaniaEdt.text()+".txt", "w")
 
         for i in (qlistend):
             plik.write(str(i)+"\n")
         plik.close
 
-        self.w = Menu()
+        self.w = WindowCykle()
         self.w.show()
         self.close()
 
@@ -806,6 +814,129 @@ class WindowBadanie(QWidget):
         self.setGeometry(800, 400, 400, 300)
         self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
         self.setWindowTitle("Nowe badanie")
+        self.show()
+
+class WindowCykle(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.interfejs()
+
+    def wstecz(self):
+        self.w = Menu()
+        self.w.show()
+        self.close()
+
+    def uruchom(self):
+        cykleLista=[]
+
+        plikBadanie=open('WIPS\Badania\\'+str(self.wynikEdt.currentText())+'.txt', "r")
+        for i in plikBadanie:
+            cykleLista.append(float(i))
+
+        cykleSprezarka=[]
+
+        plikBadanie=open('WIPS\Sprezarki\\'+str(self.sprezarkaEdt.currentText())+'.txt', "r")
+        for i in plikBadanie:
+            cykleSprezarka.append(float(i))
+
+        #def Cykle
+        listatON=[]
+        for i in range (3):
+            p=cykleLista[3]*(cykleSprezarka[1]-cykleSprezarka[2])/1/(cykleSprezarka[0]-cykleLista[i])
+            listatON.append(p)
+
+        listatOFF=[]
+        for i in range (3):
+            p=cykleLista[3]*(cykleSprezarka[1]-cykleSprezarka[2])/1/(cykleLista[i])
+            listatOFF.append(p)
+
+        listatCycle=[]
+        for i in range (3):
+            p=listatON[i]+listatOFF[i]
+            listatCycle.append(p)
+
+        listatFcomp=[]
+        for i in range (3):
+            p=60/listatCycle[i]
+            listatFcomp.append(p)
+
+        listatDCcomp=[]
+        for i in range (3):
+            p=100*listatON[i]/(listatON[i]+listatOFF[i])
+            listatDCcomp.append(p)
+
+        listaCykle=[[listatON],[listatOFF],[listatCycle],[listatFcomp],[listatDCcomp]]
+
+        plik=open('WIPS\Badania\\'+self.wynikEdt.currentText()+"_cykle.txt", "w")
+
+        for i in (listaCykle):
+            for j in range (3):
+                plik.write(str(i[0][j])+"\n")
+        plik.close
+
+        self.w = Menu()
+        self.w.show()
+        self.close()
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.w = Menu()
+            self.w.show()
+            self.close()
+
+    def interfejs(self):
+
+        # etykiety
+        etykietaWynik= QLabel("Nazwa badania: ", self)
+        etykietaSprezarka = QLabel("Sprężarka:", self)
+        etykietaIlosc = QLabel("Ilość: ", self)
+
+        # przypisanie widgetów do układu tabelarycznego
+        ukladT = QGridLayout()
+        ukladT.addWidget(etykietaWynik, 0, 0)
+        ukladT.addWidget(etykietaIlosc, 1, 2)
+        ukladT.addWidget(etykietaSprezarka, 1, 0)
+
+        self.wynikEdt = QComboBox(self)
+        listaWynikow=os.listdir('WIPS\Badania/')
+        for item in (listaWynikow):
+            if item.endswith(".txt"):
+                item=item[:-4]
+            self.wynikEdt.addItem(item)
+
+        self.sprezarkaEdt = QComboBox(self)
+        listaSprezarek=os.listdir('WIPS\Sprezarki/')
+        for item in (listaSprezarek):
+            if item.endswith(".txt"):
+                item=item[:-4]
+            self.sprezarkaEdt.addItem(item)
+
+        self.sprezarkaIlosc=QLineEdit(self)
+
+        ukladT.addWidget(self.wynikEdt, 0, 1)
+        ukladT.addWidget(self.sprezarkaEdt, 1, 1)
+        ukladT.addWidget(self.sprezarkaIlosc, 1, 3)
+
+        # przyciski
+        uruchomBtn = QPushButton("&Uruchom", self)
+        wsteczBtn = QPushButton("&Wstecz", self)
+        wsteczBtn.resize(wsteczBtn.sizeHint())
+
+        ukladH = QHBoxLayout()
+        ukladH.addWidget(uruchomBtn)
+
+        ukladT.addLayout(ukladH, 3, 0, 1, 4)
+        ukladT.addWidget(wsteczBtn, 4, 0, 1, 4)
+
+        # przypisanie utworzonego układu do okna
+        self.setLayout(ukladT)
+
+        wsteczBtn.clicked.connect(self.wstecz)
+        uruchomBtn.clicked.connect(self.uruchom)
+
+        self.setGeometry(800, 400, 400, 300)
+        self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
+        self.setWindowTitle("Cykle pracy")
         self.show()
 
 class Menu(QWidget):
