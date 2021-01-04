@@ -656,8 +656,6 @@ class WindowBadanie(QWidget):
             p=badaneListaCzlony[0]*i*float(self.iloscEdt.text())*(badanieListaTrasa[3]/60)
             listaQhamulce.append(p)
 
-        listaQ=[[listaQhamulce]]
-        print(listaQ)
         plik=open('WIPS\Badania\\'+self.nazwaBadaniaEdt.text()+".txt", "w")
 
         #def Hamulce2
@@ -724,11 +722,17 @@ class WindowBadanie(QWidget):
             listaQwyciek.append(p)
 
         listaQ=[[listaQhamulce],[listaQhamulce2],[listaQzawieszenieStat],[listaQzawieszenieDyn],[listaQklocek],[listaQPias],[listaQSmar],[listaQSyreny],[listaQwc],[listaQwyciek]]
-        print(listaQ)
+
+        qlistend=[0,0,0] #min,nor,max
+
+        for j in range (3):
+            for i in (listaQ):
+                qlistend[j]=qlistend[j]+i[0][j]
+
         plik=open('WIPS\Badania\\'+self.nazwaBadaniaEdt.text()+".txt", "w")
 
-        #for i in (lista):
-         #   plik.write(i+"\n")
+        for i in (qlistend):
+            plik.write(str(i)+"\n")
         plik.close
 
         self.w = Menu()
