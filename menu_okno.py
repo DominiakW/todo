@@ -1,11 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
-from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QLabel, QGridLayout
-from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox, QCheckBox, QMessageBox
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QLineEdit, QPushButton, QHBoxLayout, QComboBox, QCheckBox, QMessageBox, QLabel, QGridLayout, QApplication, QWidget
 from PyQt5.QtCore import Qt
 import os
 
@@ -36,7 +32,6 @@ class WindowSprezarka(QWidget):
             self.close()
 
     def interfejs(self):
-
         # etykiety
         etykietaNazwaSprężarki = QLabel("Nazwa sprężarki:", self)
         etykietaWydajnosc = QLabel("Wydajność układu [l/min]:", self)
@@ -113,7 +108,6 @@ class WindowTrasa(QWidget):
             self.close()
 
     def interfejs(self):
-
         # etykiety
         etykietaNazwaTrasy = QLabel("Nazwa trasy:", self)
         etykietaPredkosc = QLabel("Średnia prędkość [km/h]:", self)
@@ -275,7 +269,6 @@ class WindowCzlon(QWidget):
             i.setText("0")
 
     def interfejs(self):
-
         # etykiety
         etykietaNazwaCzlonu = QLabel("Nazwa członu:", self)
 
@@ -754,7 +747,7 @@ class WindowBadanie(QWidget):
         msg.setInformativeText("Qnet_veh MIN = "+str(qnetmin)+" l/min\nQnet_veh NOR = "+str(qnetnor)+" l/min\nQnet_veh MAX = "+str(qnetmax)+" l/min")
         msg.exec();
 
-        self.w = WindowCykle()
+        self.w = Menu()
         self.w.show()
         self.close()
 
@@ -765,7 +758,6 @@ class WindowBadanie(QWidget):
             self.close()
 
     def interfejs(self):
-
         # etykiety
         etykietaNazwaBadania = QLabel("Nazwa badania:", self)
         etykietaTrasa = QLabel("Trasa: ", self)
@@ -876,8 +868,6 @@ class WindowCykle(QWidget):
             p=100*listatON[i]/(listatON[i]+listatOFF[i])
             listatDCcomp.append(p)
 
-        listaCykle=[[listatON],[listatOFF],[listatCycle],[listatFcomp],[listatDCcomp]]
-
         #def Czas
         tCharge=(cykleLista[3]*(cykleSprezarka[1]-0)+cykleLista[4]*(3.4-0))/1/(float(self.sprezarkaIlosc.text())*cykleSprezarka[0])
 
@@ -922,7 +912,6 @@ class WindowCykle(QWidget):
             self.close()
 
     def interfejs(self):
-
         # etykiety
         etykietaWynik= QLabel("Nazwa badania: ", self)
         etykietaSprezarka = QLabel("Sprężarka:", self)
@@ -979,7 +968,6 @@ class WindowCykle(QWidget):
 class Menu(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         self.interfejs()
 
     def koniec(self):
@@ -1002,7 +990,8 @@ class Menu(QWidget):
         dodajSprezarkeBtn = QPushButton("Dodaj sprężarkę", self)
         dodajTraseBtn = QPushButton("Dodaj trasę", self)
         dodajCzlonBtn = QPushButton("Dodaj człon", self)
-        noweBadanieBtn = QPushButton("Nowe badanie", self)
+        noweBadanieBtn = QPushButton("Badanie zapotrzebowania", self)
+        noweCykleBtn = QPushButton("Badanie cykli", self)
         koniecBtn = QPushButton("&Koniec", self)
         koniecBtn.resize(koniecBtn.sizeHint())
 
@@ -1011,6 +1000,7 @@ class Menu(QWidget):
         ukladH.addWidget(dodajTraseBtn)
         ukladH.addWidget(dodajCzlonBtn)
         ukladH.addWidget(noweBadanieBtn)
+        ukladH.addWidget(noweCykleBtn)
 
         ukladT.addLayout(ukladH, 2, 0, 1, 3)
         ukladT.addWidget(koniecBtn, 3, 0, 1, 3)
@@ -1023,8 +1013,9 @@ class Menu(QWidget):
         dodajTraseBtn.clicked.connect(self.dodajTrase)
         dodajCzlonBtn.clicked.connect(self.dodajCzlon)
         noweBadanieBtn.clicked.connect(self.dodajBadanie)
+        noweCykleBtn.clicked.connect(self.dodajBadanieCykli)
 
-        self.setGeometry(800, 400, 200, 200)
+        self.setGeometry(600, 300, 800, 400)
         self.setWindowIcon(QIcon('WIPS\Data\lukasiewicz.png'))
         self.setWindowTitle("Menu")
         self.show()
@@ -1046,6 +1037,11 @@ class Menu(QWidget):
 
     def dodajBadanie(self):
         self.w = WindowBadanie()
+        self.w.show()
+        self.close()
+
+    def dodajBadanieCykli(self):
+        self.w = WindowCykle()
         self.w.show()
         self.close()
 
